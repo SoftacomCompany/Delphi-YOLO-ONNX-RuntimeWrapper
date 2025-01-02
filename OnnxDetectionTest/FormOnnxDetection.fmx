@@ -1,0 +1,790 @@
+object frmONNXDetection: TfrmONNXDetection
+  Left = 0
+  Top = 0
+  ClientHeight = 564
+  ClientWidth = 788
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object lyCommon: TLayout
+    Align = Client
+    Margins.Left = 3.000000000000000000
+    Margins.Top = 3.000000000000000000
+    Margins.Right = 3.000000000000000000
+    Margins.Bottom = 3.000000000000000000
+    Size.Width = 782.000000000000000000
+    Size.Height = 281.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    object spltLogImage: TSplitter
+      Align = Bottom
+      Cursor = crVSplit
+      MinSize = 20.000000000000000000
+      Position.Y = 447.000000000000000000
+      ShowGrip = False
+      Size.Width = 782.000000000000000000
+      Size.Height = 3.000000000000000000
+      Size.PlatformDefault = False
+      Visible = False
+    end
+    object lyImage: TLayout
+      Align = Client
+      Size.Width = 782.000000000000000000
+      Size.Height = 256.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object tcDetection: TTabControl
+        Align = Client
+        Size.Width = 782.000000000000000000
+        Size.Height = 256.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'tabcontrolstyle'
+        TabIndex = 0
+        TabOrder = 0
+        TabPosition = Dots
+        Sizes = (
+          782s
+          256s
+          782s
+          256s)
+        object tiOriginalImage: TTabItem
+          CustomIcon = <
+            item
+            end>
+          IsSelected = True
+          Size.Width = 8.000000000000000000
+          Size.Height = 8.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'Original image'
+          ExplicitSize.cx = 8.000000000000000000
+          ExplicitSize.cy = 8.000000000000000000
+          object imgOriginal: TImage
+            MultiResBitmap = <
+              item
+              end>
+            Align = Client
+            Size.Width = 782.000000000000000000
+            Size.Height = 231.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object pnlOriginalImageStatus: TPanel
+            Align = Bottom
+            Position.Y = 231.000000000000000000
+            Size.Width = 782.000000000000000000
+            Size.Height = 25.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
+          end
+        end
+        object tiResultImage: TTabItem
+          CustomIcon = <
+            item
+            end>
+          IsSelected = False
+          Size.Width = 8.000000000000000000
+          Size.Height = 8.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'Resultant image'
+          ExplicitSize.cx = 8.000000000000000000
+          ExplicitSize.cy = 8.000000000000000000
+          object pnlDetectedImageStatus: TPanel
+            Align = Bottom
+            Position.Y = 231.000000000000000000
+            Size.Width = 782.000000000000000000
+            Size.Height = 25.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
+          end
+          object imgDetectedImage: TImage
+            MultiResBitmap = <
+              item
+              end>
+            Align = Client
+            Size.Width = 782.000000000000000000
+            Size.Height = 231.000000000000000000
+            Size.PlatformDefault = False
+          end
+        end
+      end
+    end
+    object expDetectionLog: TExpander
+      Align = MostBottom
+      IsExpanded = False
+      Position.Y = 256.000000000000000000
+      ShowCheck = False
+      Size.Width = 782.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Detection log'
+      TabOrder = 1
+      OnClick = expDetectOptionsClick
+      OnExpandedChanged = expDetectionLogExpandedChanged
+      ContentSize = '200'
+      object memoLog: TMemo
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        DataDetectorTypes = []
+        TextSettings.WordWrap = True
+        Align = Client
+        Size.Width = 200.000000000000000000
+        Size.Height = 200.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        Viewport.Width = 196.000000000000000000
+        Viewport.Height = 196.000000000000000000
+      end
+    end
+  end
+  object dlgOpenModel: TOpenDialog
+    Filter = 'ONNX Model|*.onnx'
+    Options = [ofEnableSizing]
+    Left = 520
+    Top = 8
+  end
+  object tbarDetection: TToolBar
+    Align = MostTop
+    Margins.Top = 5.000000000000000000
+    Margins.Bottom = 5.000000000000000000
+    Position.Y = 5.000000000000000000
+    Size.Width = 788.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 5
+    object btnDetect: TButton
+      Align = Left
+      Cursor = crHandPoint
+      Enabled = False
+      Hint = 'Detect'
+      Margins.Left = 10.000000000000000000
+      Position.X = 10.000000000000000000
+      Size.Width = 155.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 10
+      Text = 'Detect >>'
+      OnClick = btnDetectClick
+    end
+    object btnCodeGenerate: TButton
+      Align = Left
+      Cursor = crHandPoint
+      Hint = 'Generate python code'
+      Margins.Left = 10.000000000000000000
+      Position.X = 340.000000000000000000
+      Size.Width = 155.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 8
+      Text = 'Generate python code'
+      OnClick = btnCodeGenerateClick
+    end
+    object btnModelprop: TButton
+      Align = Left
+      Cursor = crHandPoint
+      Enabled = False
+      Hint = 'Detect'
+      Margins.Left = 10.000000000000000000
+      Position.X = 175.000000000000000000
+      Size.Width = 155.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 9
+      Text = 'Model properties'
+      OnClick = btnModelpropClick
+    end
+    object btnSetPython: TButton
+      Align = Right
+      Margins.Right = 10.000000000000000000
+      Position.X = 619.000000000000000000
+      Size.Width = 159.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 11
+      Text = 'Select python home'
+      OnClick = btnSetPythonClick
+    end
+  end
+  object expDetectOptions: TExpander
+    Align = Top
+    Position.Y = 43.000000000000000000
+    ShowCheck = False
+    Size.Width = 788.000000000000000000
+    Size.Height = 209.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Detection options'
+    TabOrder = 6
+    OnClick = expDetectOptionsClick
+    ContentSize = '184'
+    object gplDetectOptions: TGridPanelLayout
+      Align = Client
+      Size.Width = 788.000000000000000000
+      Size.Height = 184.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 12
+      ColumnCollection = <
+        item
+          Value = 70.000000000000000000
+        end
+        item
+          Value = 30.000000000000000000
+        end>
+      ControlCollection = <
+        item
+          Column = 0
+          Control = lyLoadSaveOptions
+          Row = 0
+        end
+        item
+          Column = 1
+          Control = lyDetectionParameters
+          Row = 0
+        end>
+      RowCollection = <
+        item
+          Value = 100.000000000000000000
+        end
+        item
+          SizeStyle = Auto
+        end>
+      object lyLoadSaveOptions: TLayout
+        Align = Client
+        Margins.Left = 5.000000000000000000
+        Margins.Top = 5.000000000000000000
+        Margins.Right = 5.000000000000000000
+        Margins.Bottom = 5.000000000000000000
+        Size.Width = 541.599975585937500000
+        Size.Height = 174.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 11
+        object lyInputImage: TLayout
+          Align = Top
+          Margins.Left = 5.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Position.X = 5.000000000000000000
+          Position.Y = 73.000000000000000000
+          Size.Width = 531.599975585937500000
+          Size.Height = 24.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          object edImage: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Align = Client
+            TabOrder = 2
+            ReadOnly = True
+            Margins.Right = 3.000000000000000000
+            Size.Width = 428.599975585937500000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            OnChange = edModelChange
+          end
+          object btnImage: TButton
+            Align = Right
+            Hint = 'Load image'
+            Position.X = 507.599975585937500000
+            Size.Width = 24.000000000000000000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 3
+            Text = '...'
+            OnClick = btnImageClick
+          end
+          object lblImage: TLabel
+            Align = Left
+            AutoSize = True
+            HitTest = True
+            Size.Width = 76.000000000000000000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Image:'
+            TabOrder = 1
+            OnClick = btnImageClick
+          end
+        end
+        object lyModel: TLayout
+          Align = Top
+          Margins.Left = 5.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Position.X = 5.000000000000000000
+          Position.Y = 39.000000000000000000
+          Size.Width = 531.599975585937500000
+          Size.Height = 24.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 2
+          object edModel: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Align = Client
+            TabOrder = 3
+            ReadOnly = True
+            Margins.Right = 3.000000000000000000
+            Size.Width = 428.599975585937500000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            OnChange = edModelChange
+          end
+          object btnModel: TButton
+            Align = Right
+            Hint = 'Load model'
+            Position.X = 507.599975585937500000
+            Size.Width = 24.000000000000000000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 5
+            Text = '...'
+            OnClick = btnModelClick
+          end
+          object lblModel: TLabel
+            Align = Left
+            AutoSize = True
+            HitTest = True
+            Size.Width = 76.000000000000000000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Model:'
+            TabOrder = 2
+            OnClick = btnModelClick
+          end
+        end
+        object lyOutPath: TLayout
+          Align = Top
+          Margins.Left = 5.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Position.X = 5.000000000000000000
+          Position.Y = 107.000000000000000000
+          Size.Width = 531.599975585937500000
+          Size.Height = 24.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 14
+          object edOutPath: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Align = Client
+            TabOrder = 2
+            ReadOnly = True
+            Margins.Right = 3.000000000000000000
+            Size.Width = 428.599975585937500000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            OnChange = edModelChange
+          end
+          object btnOutPath: TButton
+            Align = Right
+            Hint = 'Select output path'
+            Position.X = 507.599975585937500000
+            Size.Width = 24.000000000000000000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 3
+            Text = '...'
+            OnClick = btnOutPathClick
+          end
+          object lblOutPath: TLabel
+            Align = Left
+            AutoSize = True
+            HitTest = True
+            Size.Width = 76.000000000000000000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Output path:'
+            TabOrder = 1
+            OnClick = btnOutPathClick
+          end
+        end
+        object lyProviders: TLayout
+          Align = Top
+          Margins.Left = 5.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Position.X = 5.000000000000000000
+          Position.Y = 5.000000000000000000
+          Size.Width = 531.599975585937500000
+          Size.Height = 24.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          object edProviders: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Align = Client
+            TabOrder = 2
+            ReadOnly = True
+            Margins.Right = 3.000000000000000000
+            Size.Width = 428.599975585937500000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            OnChange = edModelChange
+          end
+          object btnProviders: TButton
+            Align = Right
+            Hint = 'Select providers'
+            Position.X = 507.599975585937500000
+            Size.Width = 24.000000000000000000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 3
+            Text = '...'
+            OnClick = btnProvidersClick
+          end
+          object lblProviders: TLabel
+            Align = Left
+            AutoSize = True
+            HitTest = True
+            Size.Width = 76.000000000000000000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Providers:'
+            TabOrder = 1
+            OnClick = btnProvidersClick
+          end
+        end
+        object lyClassFilter: TLayout
+          Align = Top
+          Margins.Left = 5.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Position.X = 5.000000000000000000
+          Position.Y = 141.000000000000000000
+          Size.Width = 531.599975585937500000
+          Size.Height = 24.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 13
+          object edClassFilter: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Align = Client
+            TabOrder = 2
+            ReadOnly = True
+            Margins.Right = 3.000000000000000000
+            Size.Width = 428.599975585937500000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            OnChange = edClassFilterChange
+          end
+          object btnClassFilter: TButton
+            Align = Right
+            Hint = 'Select output path'
+            Position.X = 507.599975585937500000
+            Size.Width = 24.000000000000000000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 3
+            Text = '...'
+            OnClick = btnClassFilterClick
+          end
+          object lblClassFilter: TLabel
+            Align = Left
+            AutoSize = True
+            HitTest = True
+            Size.Width = 76.000000000000000000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Class filter:'
+            TabOrder = 1
+            OnClick = btnClassFilterClick
+          end
+        end
+      end
+      object lyDetectionParameters: TLayout
+        Align = Client
+        Margins.Left = 5.000000000000000000
+        Margins.Top = 5.000000000000000000
+        Margins.Right = 5.000000000000000000
+        Margins.Bottom = 5.000000000000000000
+        Size.Width = 226.400024414062500000
+        Size.Height = 174.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 12
+        object lyCfThreshold: TLayout
+          Align = Top
+          Margins.Left = 5.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Position.X = 5.000000000000000000
+          Position.Y = 5.000000000000000000
+          Size.Width = 216.400024414062500000
+          Size.Height = 58.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          object lblCfThreshold: TLabel
+            Align = Top
+            AutoSize = True
+            Size.Width = 216.400024414062500000
+            Size.Height = 16.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.HorzAlign = Center
+            Text = 'Confidence threshold'
+            TabOrder = 0
+          end
+          object sbCfThreshold: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Align = Center
+            TabOrder = 1
+            Cursor = crIBeam
+            Max = 1.000000000000000000
+            ValueType = Float
+            Increment = 0.009999999776482582
+            KeyboardType = NumbersAndPunctuation
+            OnChange = sbCfThresholdChange
+          end
+        end
+        object lyIouThreshold: TLayout
+          Align = Top
+          Margins.Left = 5.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Position.X = 5.000000000000000000
+          Position.Y = 73.000000000000000000
+          Size.Width = 216.400024414062500000
+          Size.Height = 58.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          object lblIouThreshold: TLabel
+            Align = Top
+            AutoSize = True
+            Size.Width = 216.400024414062500000
+            Size.Height = 16.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.HorzAlign = Center
+            Text = 'Iou threshold'
+            TabOrder = 0
+          end
+          object sbIouThreshold: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Align = Center
+            TabOrder = 1
+            Cursor = crIBeam
+            Max = 1.000000000000000000
+            ValueType = Float
+            Increment = 0.009999999776482582
+            KeyboardType = NumbersAndPunctuation
+            OnChange = sbIouThresholdChange
+          end
+        end
+      end
+    end
+  end
+  object dlgOpenImage: TOpenDialog
+    Filter = 
+      'All (*.svg;*.gif;*.png_old;*.gif;*.jpg;*.jpeg;*.png;*.bmp;*.ico;' +
+      '*.emf;*.wmf;*.tif;*.tiff)|*.svg;*.gif;*.png_old;*.gif;*.jpg;*.jp' +
+      'eg;*.png;*.bmp;*.ico;*.emf;*.wmf;*.tif;*.tiff|Scalable Vector Gr' +
+      'aphics (*.svg)|*.svg|Graphics Interchange Format (*.gif)|*.gif|P' +
+      'ortable Network Graphics (*.png_old)|*.png_old|GIF Image (*.gif)' +
+      '|*.gif|JPEG Image File (*.jpg)|*.jpg|JPEG Image File (*.jpeg)|*.' +
+      'jpeg|Portable Network Graphics (*.png)|*.png|Bitmaps (*.bmp)|*.b' +
+      'mp|Icons (*.ico)|*.ico|Enhanced Metafiles (*.emf)|*.emf|Metafile' +
+      's (*.wmf)|*.wmf|TIFF Images (*.tif)|*.tif|TIFF Images (*.tiff)|*' +
+      '.tiff'
+    Options = [ofEnableSizing]
+    Left = 576
+    Top = 8
+  end
+  object dlgSaveCode: TSaveDialog
+    Left = 636
+    Top = 8
+  end
+  object sbarDetection: TStatusBar
+    Align = MostBottom
+    Position.Y = 539.000000000000000000
+    ShowSizeGrip = True
+    Size.Width = 788.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object lblStatus: TLabel
+      Align = Left
+      Margins.Left = 10.000000000000000000
+      Position.X = 10.000000000000000000
+      Size.Width = 103.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Detection status: '
+      TabOrder = 2
+    end
+    object lblStatusName: TLabel
+      Align = Left
+      Position.X = 113.000000000000000000
+      Size.Width = 88.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'None'
+      TabOrder = 5
+    end
+    object lblProcessTime: TLabel
+      Align = Left
+      Margins.Left = 10.000000000000000000
+      Position.X = 211.000000000000000000
+      Size.Width = 100.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Process time: '
+      TabOrder = 1
+    end
+    object lblTimeValue: TLabel
+      Align = Left
+      Position.X = 311.000000000000000000
+      Size.Width = 127.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      Text = '0 ms'
+      TabOrder = 4
+    end
+    object lblFunctionTimeValue: TLabel
+      Align = Client
+      Margins.Right = 40.000000000000000000
+      Size.Width = 179.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      Text = '0 ms'
+      TabOrder = 3
+    end
+    object lblFunctionTime: TLabel
+      Align = Left
+      Margins.Left = 10.000000000000000000
+      Position.X = 448.000000000000000000
+      Size.Width = 121.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Run function time: '
+      TabOrder = 0
+    end
+  end
+  object popupClassFilter: TPopup
+    PlacementTarget = edClassFilter
+    Position.X = 86.000000000000000000
+    Position.Y = 240.000000000000000000
+    Size.Width = 456.000000000000000000
+    Size.Height = 217.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 11
+    object lbClasses: TListBox
+      Align = Client
+      Size.Width = 456.000000000000000000
+      Size.Height = 176.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Columns = 3
+      DisableFocusEffect = True
+      DefaultItemStyles.ItemStyle = ''
+      DefaultItemStyles.GroupHeaderStyle = ''
+      DefaultItemStyles.GroupFooterStyle = ''
+      ShowCheckboxes = True
+      Viewport.Width = 452.000000000000000000
+      Viewport.Height = 172.000000000000000000
+    end
+    object lyFilterButtons: TLayout
+      Align = Bottom
+      Position.Y = 176.000000000000000000
+      Size.Width = 456.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object btnFilterOk: TButton
+        Align = Right
+        ModalResult = 1
+        Margins.Left = 5.000000000000000000
+        Margins.Top = 5.000000000000000000
+        Margins.Right = 5.000000000000000000
+        Margins.Bottom = 5.000000000000000000
+        Position.X = 266.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 31.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'Ok'
+      end
+      object btnFilterCancel: TButton
+        Align = Right
+        ModalResult = 2
+        Margins.Left = 5.000000000000000000
+        Margins.Top = 5.000000000000000000
+        Margins.Right = 20.000000000000000000
+        Margins.Bottom = 5.000000000000000000
+        Position.X = 356.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 31.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Cancel'
+      end
+    end
+  end
+  object popupProviders: TPopup
+    PlacementTarget = edProviders
+    Position.X = 86.000000000000000000
+    Position.Y = 104.000000000000000000
+    Size.Width = 323.000000000000000000
+    Size.Height = 193.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 10
+    object lbProviders: TListBox
+      Align = Client
+      Size.Width = 323.000000000000000000
+      Size.Height = 152.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      DisableFocusEffect = True
+      DefaultItemStyles.ItemStyle = ''
+      DefaultItemStyles.GroupHeaderStyle = ''
+      DefaultItemStyles.GroupFooterStyle = ''
+      ShowCheckboxes = True
+      Viewport.Width = 319.000000000000000000
+      Viewport.Height = 148.000000000000000000
+    end
+    object lyProvidersButtons: TLayout
+      Align = Bottom
+      Position.Y = 152.000000000000000000
+      Size.Width = 323.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object btnProvidersOk: TButton
+        Align = Right
+        ModalResult = 1
+        Margins.Left = 5.000000000000000000
+        Margins.Top = 5.000000000000000000
+        Margins.Right = 5.000000000000000000
+        Margins.Bottom = 5.000000000000000000
+        Position.X = 133.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 31.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'Ok'
+      end
+      object btnProvidersCancel: TButton
+        Align = Right
+        ModalResult = 2
+        Margins.Left = 5.000000000000000000
+        Margins.Top = 5.000000000000000000
+        Margins.Right = 20.000000000000000000
+        Margins.Bottom = 5.000000000000000000
+        Position.X = 223.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 31.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Cancel'
+      end
+    end
+  end
+  object dlgOpenPython: TOpenDialog
+    Filter = 'dll|python*.dll'
+    Options = [ofEnableSizing]
+    Left = 696
+    Top = 7
+  end
+end
