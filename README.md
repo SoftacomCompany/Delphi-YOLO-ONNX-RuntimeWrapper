@@ -9,7 +9,7 @@ ___
 <br/>
 
 - [Introduction](#Introduction)
-    - [What Delphi YOLO ONNX Runtime wrapper is?](#What-Delphi-YOLO-ONNX-Runtime-wrapper-is?)
+    - [What Delphi YOLO ONNX Runtime wrapper is?](#what-delphi-yolo-onnx-runtime-wrapper-is)
     - [Remarks](#remarks)
 - [Supported platforms](#supported-platforms)    
 - [Customizing the Runtime Environment](#Customizing-the-Runtime-Environment)
