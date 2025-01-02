@@ -1,4 +1,4 @@
-# Delphi ONNX Runtime wrapper
+# Delphi YOLO ONNX Runtime wrapper
 
 ___
 ![GitHub](https://img.shields.io/badge/IDE%20Version-Delphi%2010.3/11/12-yellow)
@@ -9,7 +9,7 @@ ___
 <br/>
 
 - [Introduction](#Introduction)
-    - [Who is Delphi ONNX Runtime wrapper](#Who-is-Delphi-ONNX-Runtime-wrapper)
+    - [What Delphi YOLO ONNX Runtime wrapper is?](#What-Delphi-YOLO-ONNX-Runtime-wrapper-is?)
     - [Remarks](#remarks)
 - [Supported platforms](#supported-platforms)    
 - [Customizing the Runtime Environment](#Customizing-the-Runtime-Environment)
@@ -25,9 +25,8 @@ ___
 
 # Introduction
 
-## Who is Delphi ONNX Runtime wrapper
-The Delphi ONNX Runtime wrapper is a singleton interface. It provides loading and running a model using the ONNX Runtime cross-platform machine learning model acselerator. 
-It allows you to detect classes in an image from Delphi language.
+## What Delphi YOLO ONNX Runtime wrapper is?
+The Delphi YOLO ONNX Runtime wrapper is a singleton interface which provides loading and running a YOLO deep machine learning model (https://docs.ultralytics.com/) from the Delphi applications. It allows you to detect objects on the image with Delphi using Object Pascal programming language. We made an easy access to the artificial intelligence (AI) computer vision model for your VCL and FMX applications.
 
 <br/>
 
@@ -35,7 +34,7 @@ It allows you to detect classes in an image from Delphi language.
 
 > [!IMPORTANT]
 >
-> This is an unofficial library. **Delphi ONNX Runtime wrapper** does not provide any official library for `Delphi`.
+> This is an unofficial library. **Delphi YOLO ONNX Runtime wrapper** does not provide any official library for `Delphi` or for `YOLO`.
 
 <br/>
 
@@ -46,15 +45,15 @@ These limitations are due to the use of the ONNX runtime API.
 <br/>
 
 # Customizing the Runtime Environment
-The ONNX Runtime is accessed by running Python code.
-Python is not installed by default on operating system. You can download the required version of python from python.org:
+The YOLO ONNX Runtime is accessed by running Python code.
+Python is not installed by default on the operating system. You can download the required version of Python from python.org:
 https://www.python.org/downloads/
 
 >At this stage it is necessary to decide which platform will be used. 
- It should be noted that only 32-bit environment is provided for vcl development. 
- Using 64-bit version is possible only on fmx.<br/>
+ It should be noted that only 32-bit environment is provided for VCL development. 
+ Using 64-bit version is possible only for the FMX framework.<br/>
 
-Make sure you have Python installed and that pip (package manager) is up to date.
+Make sure you have Python installed and pip (package manager) is up to date.
 
 ```
 python -m pip install --upgrade pip
@@ -100,12 +99,12 @@ pip install opencv-python
 The [Python4Delphi](https://github.com/pyscripter/python4delphi) (P4D) library is used to access Python objects from Delphi.
 
 There are several ways of installation.
-1. Use GetIt Package manager Delphi
-2. Use Git Hub: https://github.com/pyscripter/python4delphi
+1. Use GetIt Package manager
+2. Use GitHub: https://github.com/pyscripter/python4delphi
 
 <br/>
 
-**OnnxRTWrapper** can be installed using a package or manually by copying the contents of the source folder.
+YOLO **OnnxRTWrapper** can be installed using a package or manually by copying the contents of the source folder.
 Then go to: 
 ```
    Tools-Options-Language-Delphi-Library
@@ -211,7 +210,7 @@ Repeat it for both Windows 32 and Windows 64 platforms.
 
 - **ONNXRT.Utils.pas**
 
-  These are the common functions used by the ONNX Runtime wrapper library classes.
+  These are the common functions used by the YOLO ONNX Runtime wrapper library classes.
 
 - **ONNXRT.Classes.pas**
 
@@ -288,8 +287,8 @@ begin
 end;
 
 ```
-When API functions are called, initialization and connection to the python module will be done automatically. 
-But if desired or in case of failure, initialization is performed by calling the **Initialize** function with the full path to the python library.
+When API functions are called, initialization and connection to the Python module will be done automatically. 
+But if desired or in case of failure, initialization is performed by calling the **Initialize** function with the full path to the Python library.
 ```pascal
 function Initialize(const aDllName: string = ''): Boolean;
 ```
