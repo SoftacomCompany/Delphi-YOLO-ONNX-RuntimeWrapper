@@ -9,15 +9,16 @@ ___
 <br/>
 
 - [Introduction](#Introduction)
-    - [What Delphi YOLO ONNX Runtime wrapper is?](#what-delphi-yolo-onnx-runtime-wrapper-is)
+    - [What is Delphi YOLO ONNX Runtime wrapper?](#what-is-delphi-yolo-onnx-runtime-wrapper)
     - [Remarks](#remarks)
 - [Supported platforms](#supported-platforms)    
-- [Customizing the Runtime Environment](#Customizing-the-Runtime-Environment)
-- [Installing the Development Environment](#Installing-the-Development-Environment)
-- [Package composition](#Package-composition)
+- [Customizing the Runtime Environment](#customizing-the-runtime-environment)
+- [Installing the Development Environment](#installing-the-development-environment)
+- [Package composition](#package-composition)
     - [python_common folder](#python_common-folder)
-    - [ONNXRT_core folder](#ONNXRT_core-folder)
-- [How to use](#How-to-use)
+    - [ONNXRT_core folder](#onnxrt_core-folder)
+- [How to use](#how-to-use)
+- [Prediction example](#prediction-example)
 - [License](#license)
  
 <br/>
@@ -25,21 +26,37 @@ ___
 
 # Introduction
 
-## What Delphi YOLO ONNX Runtime wrapper is?
-The Delphi YOLO ONNX Runtime wrapper is a singleton interface which provides loading and running a YOLO deep machine learning model (https://docs.ultralytics.com/) from the Delphi applications. It allows you to detect objects on the image with Delphi using Object Pascal programming language. We made an easy access to the artificial intelligence (AI) computer vision model for your VCL and FMX applications.
+## What is Delphi YOLO ONNX Runtime wrapper?
+The Delphi YOLO ONNX Runtime wrapper is a singleton interface which provides loading and running a YOLO deep machine learning model (https://docs.ultralytics.com/) from the Delphi applications. It allows you to detect objects in an image with Delphi using Object Pascal programming language. We made an easy access to the artificial intelligence (AI) computer vision model for your VCL and FMX applications.<br/>
+
+This project implements the following functions:
+1. Obtaining metadata from the model in ONNX format.
+2. Recognizing 80 predefined classes using trained YOLO models in ONNX format.
+
+It is possible to expand the functionality to use the ONNX format for other types of models.
+
+To use models in ONNX Runtime, you can convert YOLO models to ONNX format. For more information, see: https://docs.ultralytics.com/integrations/onnx/
 
 <br/>
 
 ## Remarks
 
-> [!IMPORTANT]
+<br/>
+
+> [! NOTE]
+>
+> YOLO models are provided under AGPL-3.0 and Enterprise licenses.
+
+<br/>
+
+> [! IMPORTANT]
 >
 > This is an unofficial library. **Delphi YOLO ONNX Runtime wrapper** does not provide any official library for `Delphi` or for `YOLO`.
 
 <br/>
 
 # Supported platforms
-These limitations are due to the use of the ONNX runtime API.
+These limitations stem from the use of the ONNX runtime API.
 >Windows (x64), Linux (x64, ARM64), Mac (X64)
 
 <br/>
@@ -105,6 +122,8 @@ There are several ways of installation.
 <br/>
 
 YOLO **OnnxRTWrapper** can be installed using a package or manually by copying the contents of the source folder.
+Download or clone repository. Open project **package/OnnxRTWrapper.dpk**, build and install by IDE.
+
 Then go to: 
 ```
    Tools-Options-Language-Delphi-Library
@@ -242,7 +261,7 @@ It is possible to subscribe for status changes:
     /// <summary> Unregistering a status change event. </summary>
     procedure UnRegisterStatusEvent(aStatusEvent: TProc<TObject, Integer, string>);
 ```
-As example:
+For example:
 ```pascal
 procedure TfrmONNXDetection.OnStatusChange(Sender: TObject; aIntStatus: Integer;
   aStrStatus: string; aComplete: Boolean);
@@ -305,7 +324,7 @@ Next, we can retrieve the model metadata:
 ```pascal
 var LMeta := OnnxrtWrapper.GetMetadata;
 ```
-As example:
+For example:
 ```pascal
 procedure TfrmONNXDetection.btnModelpropClick(Sender: TObject);
 begin
@@ -382,8 +401,8 @@ For the prediction function, you must specify the initial data. The main ones ar
 1. Model file name.
 2. Image file name.
 
-And if we are going to save the obtained result, it is necessary to specify the output image file name.
-Other parameters can be skipped, they will be filled with default values or the last set values.
+If we intend to save the obtained result, it is necessary to specify the output image file name. 
+All other parameters can be omitted, as they will either use default values or retain the last assigned values.
 
 ```pascal
 uses
@@ -437,6 +456,41 @@ You can define an event that occurs when a result is added:
           ...
         end;
 ```
+<br/>
+
+# Prediction example
+The project has a demo program **OnnxDetectionTest** that we use to test the functionality of the library. The program is executed as an FMX-project for the 64-bit platform.
+<br/>
+In our work, we used a trained YOLO11l model converted to ONNX format.
+
+```
+  @software{yolo11_ultralytics,
+    author = {Glenn Jocher and Jing Qiu},
+    title = {Ultralytics YOLO11},
+    version = {11.0.0},
+    year = {2024},
+    url = {https://github.com/ultralytics/ultralytics},
+    orcid = {0000-0001-5950-6979, 0000-0002-7603-6750, 0000-0003-3783-7069},
+    license = {AGPL-3.0}
+  }
+```
+
+Images were sourced from https://pixabay.com/
+
+<br/>
+
+Initial data and processing results
+![!](img/animals-predict.jpg)
+
+Detected classes
+![Detected 0](img/animals-2198994_1280-dt010325133308.jpg)
+
+Example of prediction #1
+![Detected 1](img/city-823604_1280-dt010325142036.jpg)
+
+Example of prediction #2
+![Detected 2](img/london-590114_1280-dt010325142231.jpg)
+
 <br/>
 
 # License
