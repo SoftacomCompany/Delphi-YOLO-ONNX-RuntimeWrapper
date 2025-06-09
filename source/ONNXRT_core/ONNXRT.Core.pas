@@ -245,6 +245,7 @@ begin
   Result.AddOrSetValue(S_OUT_IMAGEFILE, aOutImagefile);
   Result.AddOrSetValue(S_MODELFILE, aModelFile);
   Result.AddOrSetValue(S_PROVIDERS, aProviders);
+  Result.AddOrSetValue(S_FILTERCLASSES, aFilterClasses);
 
   if TryStrToFloat(acfThreshold, LVar) then
     Result.AddOrSetValue(S_CONFIDENCE_THRESHOLD, FormatFloat(C_FLOATFORMAT, LVar))
@@ -253,7 +254,7 @@ begin
   if TryStrToFloat(aiouThreshold, LVar) then
     Result.AddOrSetValue(S_IOU_THRESHOLD, FormatFloat(C_FLOATFORMAT, LVar))
   else
-    Result.AddOrSetValue(S_CONFIDENCE_THRESHOLD, FormatFloat(C_FLOATFORMAT, C_DEFAULT_IOU_THRESHOLD));
+    Result.AddOrSetValue(S_IOU_THRESHOLD, FormatFloat(C_FLOATFORMAT, C_DEFAULT_IOU_THRESHOLD));
 
   Result.AddOrSetValue(S_MODELTYPE, TModelType.TypeOf(aModelType).AsString);
 end;
