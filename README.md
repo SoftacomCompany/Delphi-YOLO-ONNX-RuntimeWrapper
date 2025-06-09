@@ -66,9 +66,7 @@ The YOLO ONNX Runtime is accessed by running Python code.
 Python is not installed by default on the operating system. You can download the required version of Python from python.org:
 https://www.python.org/downloads/
 
->At this stage it is necessary to decide which platform will be used. 
- It should be noted that only 32-bit environment is provided for VCL development. 
- Using 64-bit version is possible only for the FMX framework.<br/>
+>At this stage it is necessary to decide which platform will be used (32-bit or 64-bit).<br/>
 
 Make sure you have Python installed and pip (package manager) is up to date.
 
