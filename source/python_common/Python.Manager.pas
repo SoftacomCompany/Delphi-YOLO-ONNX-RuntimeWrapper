@@ -31,6 +31,8 @@ type
     function IsPythonConnected: Boolean;
     function RunCode(const aCode: string; const aDict: PPyObject = nil): Boolean; overload;
     function RunCode(const aCode: string; aNew_dict: Boolean): Boolean; overload;
+    procedure SetBuffer(ABuffer: Pointer; ALen: Integer);
+    procedure ClearBuffer;
 
     property ExecTime: Int64 read GetExecTime;
     property Engine: TPythonEngine read GetEngine;
@@ -41,6 +43,9 @@ type
   private
     fExecTime: Int64;
     fLastError: string;
+    fBuffer: Pointer;
+    fBufferLen: Integer;
+    fRawBuffer: PPyObject;
     class var fInstance: IPythonManager;
     class function GetInstance: IPythonManager; static;
     function FindModule(const aModuleName: string): TPythonModule;
@@ -65,6 +70,9 @@ type
     function IsPythonConnected: Boolean;
     function RunCode(const aCode: string; const aDict: PPyObject = nil): Boolean; overload;
     function RunCode(const aCode: string; aNew_dict: Boolean): Boolean; overload;
+    procedure SetBuffer(ABuffer: Pointer; ALen: Integer);
+    procedure PrepareRawBuffer;
+    procedure ClearBuffer;
     {prop}
     property ExecTime: Int64 read GetExecTime;
     property Engine: TPythonEngine read GetEngine;
@@ -120,6 +128,13 @@ end;
 function TPythonManager.CheckModuleName(const aModuleName: string): Boolean;
 begin
   Result := (not aModuleName.Trim.IsEmpty);
+end;
+
+procedure TPythonManager.ClearBuffer;
+begin
+  fBuffer := nil;
+  fBufferLen := 0;
+  fRawBuffer := nil;
 end;
 
 destructor TPythonManager.Destroy;
@@ -212,6 +227,14 @@ begin
   Result := AddModule(LModule);
 end;
 
+procedure TPythonManager.PrepareRawBuffer;
+begin
+  if Assigned(fBuffer) then
+    fRawBuffer := Engine.PyBytes_FromStringAndSize(PAnsiChar(fBuffer), fBufferLen)
+  else
+    fRawBuffer := nil;
+end;
+
 function TPythonManager.PythonConnect(const aDllName: string): Boolean;
 var
   LEngine: TPythonEngine;
@@ -295,8 +318,23 @@ begin
   try
     with Engine do
     begin
+      if Assigned(fBuffer) then
+      begin
+        if not Assigned(fRawBuffer) then
+          PrepareRawBuffer;
+        if Assigned(fRawBuffer) then
+        begin
+          PyDict_SetItemString(PyModule_GetDict(GetMainModule),
+            PAnsiChar(AnsiString('raw_buffer')), fRawBuffer);
+          GetPythonEngine.Py_DecRef(fRawBuffer);
+          fRawBuffer := nil;
+        end;
+      end;
+
       if aDict <> nil then
-        ExecString(UTF8Encode(aCode), PyModule_GetDict(GetMainModule), aDict)
+      begin
+        ExecString(UTF8Encode(aCode), PyModule_GetDict(GetMainModule), aDict);
+      end
       else
         ExecString(UTF8Encode(aCode));
     end;
@@ -318,6 +356,17 @@ begin
     Result := RunCode(aCode, Engine.PyDict_New)
   else
     Result := RunCode(aCode)
+end;
+
+procedure TPythonManager.SetBuffer(ABuffer: Pointer; ALen: Integer);
+begin
+  if (ABuffer <> nil) and (ALen > 0) then
+  begin
+    fBuffer := ABuffer;
+    fBufferLen := ALen;
+  end
+  else
+    ClearBuffer;
 end;
 
 initialization

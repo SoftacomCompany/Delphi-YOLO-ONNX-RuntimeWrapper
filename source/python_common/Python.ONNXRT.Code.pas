@@ -35,27 +35,38 @@ const
   /// </return>
   ONNXRT_MODELINFO_DEF =
     'def modelinfo(modelfile):' + LF +
-    '    session = onnxruntime.InferenceSession(modelfile, providers=[])' + LF +
-    '    model_inputs = session.get_inputs()' + LF +
-    '    model_outputs = session.get_outputs()' + LF +
-    '    model_meta = session.get_modelmeta()' + LF +
-    '    return model_inputs, model_outputs, model_meta';
+    '    if not modelfile:' + LF +
+    '        return None, None, None' + LF +
+    '    try:' + LF +
+    '        session = onnxruntime.InferenceSession(modelfile, providers=[])' + LF +
+    '        model_inputs = session.get_inputs()' + LF +
+    '        model_outputs = session.get_outputs()' + LF +
+    '        model_meta = session.get_modelmeta()' + LF +
+    '        return model_inputs, model_outputs, model_meta' + LF +
+    '    except Exception:' + LF +
+    '        return None, None, None';
 
   /// <summary> Getting model classes.</summary>
   /// <param name="session"> Current onnx runtime session. </param>
   /// <return> modelclasses - class name dictionary (class index : class name). </return>
   ONNXRT_MODELCLASSES_DEF =
     'def getmodelclasses(session):' + LF +
-    '    modelclasses = ast.literal_eval(session.get_modelmeta().custom_metadata_map["names"])' + LF +
-    '    return modelclasses';
+    '    try:' + LF +
+    '        modelclasses = ast.literal_eval(session.get_modelmeta().custom_metadata_map["names"])' + LF +
+    '        return modelclasses' + LF +
+    '    except Exception:' + LF +
+    '        return []';
 
   /// <summary> Generating random colors for model classes.</summary>
   /// <param name="array_size"> Number of array elements. </param>
   /// <return> colors - array with random RGB values ([[R, G, B]...[Rn, Gn, Bn]]). </return>
   ONNXRT_GENERATECOLORS_DEF =
     'def gencolors(array_size):' + LF +
-    '    colors = np.random.uniform(0, 255, size=(array_size, 3))' + LF +
-    '    return colors';
+    '    try:' + LF +
+    '        colors = np.random.uniform(0, 255, size=(array_size, 3))' + LF +
+    '        return colors' + LF +
+    '    except Exception:' + LF +
+    '        return []';
 
   /// <summary> Filtering overlapping bounding boxes. </summary>
   /// <param name="boxes"> list of detected class boundaries.</param>
@@ -176,6 +187,15 @@ const
     '    input_image = cv2.cvtColor(cv2.imread(input_imagefile), cv2.COLOR_BGR2RGB)' + LF +
     '    return input_image';
 
+  ONNXRT_CV2_OPENIMAGEBUFF_DEF =
+    'def cv2_openimage_from_buffer(raw_buffer, height, width, channels):' + LF +
+    '    img = np.frombuffer(raw_buffer, dtype=np.uint8).reshape((height, width, channels))' + LF +
+    '    if channels == 4:' + LF +
+    '       img_rgb = cv2.cvtColor(img, cv2.COLOR_BGRA2RGB)' + LF +
+    '    elif channels == 3:' + LF +
+    '       img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)' + LF +
+    '    return img_rgb';
+
   /// <summary> Save image by cv2 function. </summary>
   /// <param name="out_image"> NumPy array of the image in RGB colors. </param>
   /// <param name="out_image_File"> Path and file name of saving image. </param>
@@ -198,7 +218,12 @@ const
   /// </return>
   ONNXRT_DETECTION_DEF =
     'def onnxrt_detection(modelfile, providers, input_image, filterclasses, cf_thres, iou_thres):' + LF +
-    '    session = onnxruntime.InferenceSession(modelfile, providers=providers)' + LF +
+    '    if not modelfile:' + LF +
+    '        return [], [], [], [], []' + LF +
+    '    try:' + LF +
+    '      session = onnxruntime.InferenceSession(modelfile, providers=providers)' + LF +
+    '    except Exception:' + LF +
+    '        return [], [], [], [], []' + LF +
     '    # detection - code from external module' + LF +
     '    boxes, scores, indices = detection(session, input_image)' + LF +
     '    boxes, scores, indices = filterout_overlapping(boxes, scores, indices, cf_thres, iou_thres)' + LF +
@@ -213,6 +238,8 @@ const
   ONNXRT_AVAILABLE_PROVIDERS = 'providers = onnxruntime.get_available_providers()';
   /// <summary> Open image command. </summary>
   ONNXRT_CV2_OPENIMAGE = 'input_image = cv2_openimage("<input_imagefile>")';
+  /// <summary> Open image command. </summary>
+  ONNXRT_CV2_OPENIMAGEBUFF = 'input_image = cv2_openimage_from_buffer(raw_buffer, <imheight>, <imwidth>, <imchannels>)';
   /// <summary> Save image command. </summary>
   ONNXRT_CV2_SAVEIMAGE = 'cv2_saveimage(out_image, "<out_imagefile>")';
   /// <summary> Drawing of detections on the image. </summary>
@@ -233,6 +260,7 @@ const
     ONNXRT_MARKDETECTED_DEF,
     ONNXRT_DRAWDETECTION_DEF,
     ONNXRT_CV2_OPENIMAGE_DEF,
+    ONNXRT_CV2_OPENIMAGEBUFF_DEF,
     ONNXRT_CV2_SAVEIMAGE_DEF,
     ONNXRT_DETECTION_DEF
     ];
@@ -245,7 +273,10 @@ const
     S_FILTERCLASSES, //Filter for detected classes
     S_CONFIDENCE_THRESHOLD, //Confidence threshold for filtering detections (float)
     S_IOU_THRESHOLD, //IoU (Intersection over Union) threshold for non-maximum suppression (float)
-    S_MODELTYPE //Type of model in use
+    S_MODELTYPE, //Type of model in use
+    S_IMAGEWIDTH,
+    S_IMAGEHEIGHT,
+    S_IMAGECHANNELS
     ];
 
 implementation
