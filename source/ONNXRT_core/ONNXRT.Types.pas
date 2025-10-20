@@ -68,6 +68,7 @@ type
   public
     procedure AddInput(const aInput: string);
     procedure AddOutput(const aOutput: string);
+    procedure Clear;
   end;
 
 implementation
@@ -161,6 +162,31 @@ end;
 procedure TMetadata.AddOutput(const aOutput: string);
 begin
   TOnnxRTU.AppendArray<string>(outputs, aOutput);
+end;
+
+procedure TMetadata.Clear;
+begin
+    model_description := EmptyStr;
+    model_domain := EmptyStr;
+    graph_description := EmptyStr;
+    graph_name := EmptyStr;
+    producer_name := EmptyStr;
+    model_version := EmptyStr;
+    { Custom metadata map }
+    date := EmptyStr;
+    description := EmptyStr;
+    author := EmptyStr;
+    version := EmptyStr;
+    task := EmptyStr;
+    license := EmptyStr;
+    docs := EmptyStr;
+    stride := EmptyStr;
+    batch := EmptyStr;
+    imgsz := EmptyStr;
+    names := EmptyStr;
+
+    inputs := nil;
+    outputs := nil;
 end;
 
 { TIntTimeHelper }

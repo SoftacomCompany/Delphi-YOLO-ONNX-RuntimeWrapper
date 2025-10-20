@@ -33,6 +33,9 @@ const
   S_CONFIDENCE_THRESHOLD = 'cf_threshold';
   S_IOU_THRESHOLD ='iou_threshold';
   S_MODELTYPE = 'modeltype';
+  S_IMAGEWIDTH = 'imwidth';
+  S_IMAGEHEIGHT = 'imheight';
+  S_IMAGECHANNELS = 'imchannels';
 
   {options for python code generating}
   pcDrawDetected = 1; //Generate draw code
