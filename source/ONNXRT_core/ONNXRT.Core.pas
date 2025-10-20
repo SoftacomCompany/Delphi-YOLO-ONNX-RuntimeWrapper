@@ -32,6 +32,8 @@ type
     function GetDetectionResults: IDetectionResults;
     function Initialize(const aDllName: string = ''): Boolean;
     function IsInitialized: Boolean;
+    procedure SetImageBuffer(ABuffer: Pointer; ALen: Integer);
+    procedure ClearImageBuffer;
     {detection}
     /// <summary> Registering a status change event. </summary>
     procedure RegisterStatusEvent(aStatusEvent: TProc<TObject, Integer, string, Boolean>);
@@ -53,6 +55,9 @@ type
       const aFilterClasses: string = '';
       const acfThreshold: string = '';
       const aiouThreshold: string = '';
+      const aImageWidth: string = '';
+      const aImageHeight: string = '';
+      const aImageChannels: string ='';
       const aModelType: string = ''): TDictionary<string, string>;
     /// <summary> Generating a python code by options and internal detection values. </summary>
     /// <param name="aOptions">
@@ -95,6 +100,19 @@ type
       const acfThreshold: string = '';
       const aiouThreshold: string = '';
       const aModelType: string = ''): Boolean; overload;
+    /// <summary>
+    ///   Main detection procedure.
+    ///   Parameters are image buffer and detection values.
+    /// </summary>
+    /// <return> True when success. </return>
+    function Predict(const aModelFile : string; const aImageBuffer: Pointer;
+      const aImageWidth, aImageHeight, aImageChannels: Integer;
+      const aOutImagefile: string = '';
+      const aProviders: string = '';
+      const aFilterClasses: string = '';
+      const acfThreshold: string = '';
+      const aiouThreshold: string = '';
+      const aModelType: string = ''): Boolean; overload;
     {prop}
     /// <summary> The status of current process. </summary>
     property ProcessStatus: TProcessStatus read GetProcessStatus write SetProcessStatus;
@@ -126,6 +144,8 @@ type
     fDetectionValues: TDictionary<string, string>;
     fProcessStatus: TProcessStatus;
     fStatusEvents: TList<TProc<TObject, Integer, string, Boolean>>;
+    fRawBuffer: Pointer;
+    fRawBufferLength: Integer;
     class var fInstance: IOnnxrtWrapper;
     class function GetInstance: IOnnxrtWrapper; static;
     function DoInitialization: Boolean;
@@ -159,6 +179,8 @@ type
     function GetDetectionResults: IDetectionResults;
     function Initialize(const aDllName: string = ''): Boolean;
     function IsInitialized: Boolean;
+    procedure SetImageBuffer(ABuffer: Pointer; ALen: Integer);
+    procedure ClearImageBuffer;
     {detection}
     procedure RegisterStatusEvent(aStatusEvent: TProc<TObject, Integer, string, Boolean>);
     procedure UnRegisterStatusEvent(aStatusEvent: TProc<TObject, Integer, string, Boolean>);
@@ -171,6 +193,9 @@ type
       const aFilterClasses: string = '';
       const acfThreshold: string = '';
       const aiouThreshold: string = '';
+      const aImageWidth: string = '';
+      const aImageHeight: string = '';
+      const aImageChannels: string ='';
       const aModelType: string = ''): TDictionary<string, string>;
     function BuildDetectionCode(aOptions: Word): string; overload;
     function BuildDetectionCode(aOptions: Word;
@@ -183,7 +208,15 @@ type
       const acfThreshold: string = '';
       const aiouThreshold: string = '';
       const aModelType: string = ''): Boolean; overload;
-    {prop}
+    function Predict(const aModelFile : string; const aImageBuffer: Pointer;
+      const aImageWidth, aImageHeight, aImageChannels: Integer;
+      const aOutImagefile: string = '';
+      const aProviders: string = '';
+      const aFilterClasses: string = '';
+      const acfThreshold: string = '';
+      const aiouThreshold: string = '';
+      const aModelType: string = ''): Boolean; overload;
+     {prop}
     property ProcessStatus: TProcessStatus read GetProcessStatus write SetProcessStatus;
     property FunctionTime: TIntTime read GetFunctionTime;
     property ProcessTime: TIntTime read GetProcessTime;
@@ -216,7 +249,15 @@ begin
   Result := fInstance;
 end;
 
+procedure TOnnxrtWrapper.ClearImageBuffer;
+begin
+  fRawBuffer := nil;
+  fRawBufferLength := 0;
+end;
+
 constructor TOnnxrtWrapper.Create;
+const
+  C_DeffChannels = '3';
 begin
   inherited;
   fLastError := EmptyStr;
@@ -231,11 +272,14 @@ begin
     end);
   DetectionValue[S_CONFIDENCE_THRESHOLD] := FormatFloat(C_FLOATFORMAT, C_DEFAULT_CONFIDENCE_THRESHOLD);
   DetectionValue[S_IOU_THRESHOLD] := FormatFloat(C_FLOATFORMAT, C_DEFAULT_IOU_THRESHOLD);
+  DetectionValue[S_IMAGECHANNELS] := C_DeffChannels;
   DetectionValue[S_MODELTYPE] := Low(TModelType).AsString;
+  fRawBuffer := nil;
+  fRawBufferLength := 0;
 end;
 
 function TOnnxrtWrapper.CreateDetectionValues(const aModelFile, aImagefile, aOutImagefile,
-  aProviders, aFilterClasses, acfThreshold, aiouThreshold,
+  aProviders, aFilterClasses, acfThreshold, aiouThreshold, aImageWidth, aImageHeight, aImageChannels,
   aModelType: string): TDictionary<string, string>;
 var
   LVar: Double;
@@ -255,6 +299,10 @@ begin
     Result.AddOrSetValue(S_IOU_THRESHOLD, FormatFloat(C_FLOATFORMAT, LVar))
   else
     Result.AddOrSetValue(S_IOU_THRESHOLD, FormatFloat(C_FLOATFORMAT, C_DEFAULT_IOU_THRESHOLD));
+
+  Result.AddOrSetValue(S_IMAGEHEIGHT, aImageHeight);
+  Result.AddOrSetValue(S_IMAGEWIDTH, aImageWidth);
+  Result.AddOrSetValue(S_IMAGECHANNELS, aImageChannels);
 
   Result.AddOrSetValue(S_MODELTYPE, TModelType.TypeOf(aModelType).AsString);
 end;
@@ -347,7 +395,9 @@ begin
   Result := ONNXRT_MODELDETECTION + LF + ONNXRT_DETECTION;
   //Adding image loading code
   if (aOptions and pcLoad) <> 0 then
-    Result := ONNXRT_CV2_OPENIMAGE + sLineBreak + Result;
+    Result := ONNXRT_CV2_OPENIMAGE + sLineBreak + Result
+  else
+    Result := ONNXRT_CV2_OPENIMAGEBUFF + sLineBreak + Result;
   //Adding image drawing code
   if (aOptions and (pcSave or pcDrawDetected)) <> 0 then
     Result := Result + sLineBreak + ONNXRT_DRAWDETECTION
@@ -565,11 +615,22 @@ begin
   var LModelType := ExtractModelType(aValues);
   if not IsModelInitialized(LModelType) and not DoModelInitialization(LModelType) then
     Exit(False);
+  LOptions := 0;
   if aValues.TryGetValue(S_OUT_IMAGEFILE, LOutFile) and (not LOutFile.Trim.IsEmpty) then
-    LOptions := pcEnableIO
+    LOptions := LOptions + pcSave;
+  if aValues.TryGetValue(S_INPUT_IMAGEFILE, LOutFile) and (not LOutFile.Trim.IsEmpty) then
+  begin
+    LOptions := LOptions + pcLoad;
+    PythonManager.ClearBuffer;
+  end
   else
-    LOptions := pcLoad;
+  begin
+    if not Assigned(fRawBuffer) then
+      Exit(False);
+  end;
   ProcessStatus := psProcessing;
+  if True then
+
   Result := PythonManager.RunCode(BuildDetectionCode(LOptions, aValues), True);
   if Result then
   begin
@@ -585,8 +646,29 @@ function TOnnxrtWrapper.Predict(const aModelFile, aImagefile, aOutImagefile,
   aProviders, aFilterClasses, acfThreshold, aiouThreshold, aModelType: string): Boolean;
 begin
   var LDict := CreateDetectionValues(aModelFile, aImagefile, aOutImagefile,
-    aProviders, aFilterClasses, acfThreshold, aiouThreshold, aModelType);
+    aProviders, aFilterClasses, acfThreshold, aiouThreshold, '', '', '', aModelType);
   try
+    Result := Predict(LDict);
+  finally
+    LDict.Free;
+  end;
+end;
+
+function TOnnxrtWrapper.Predict(const aModelFile: string;
+  const aImageBuffer: Pointer; const aImageWidth, aImageHeight, aImageChannels: Integer;
+  const aOutImagefile, aProviders, aFilterClasses, acfThreshold, aiouThreshold,
+  aModelType: string): Boolean;
+begin
+  if not Assigned(aImageBuffer) then
+  begin
+    ClearImageBuffer;
+    Exit(False);
+  end;
+  var LDict := CreateDetectionValues(aModelFile, '', aOutImagefile,
+    aProviders, aFilterClasses, acfThreshold, aiouThreshold,
+    aImageWidth.ToString, aImageHeight.ToString, aImageChannels.ToString, aModelType);
+  try
+    SetImageBuffer(aImageBuffer, aImageWidth * aImageHeight * aImageChannels);
     Result := Predict(LDict);
   finally
     LDict.Free;
@@ -635,6 +717,18 @@ procedure TOnnxrtWrapper.SetDetectionValue(const aKey, aValue: string);
 begin
   if not aKey.Trim.IsEmpty then
     fDetectionValues.AddOrSetValue(aKey, aValue);
+end;
+
+procedure TOnnxrtWrapper.SetImageBuffer(ABuffer: Pointer; ALen: Integer);
+begin
+  if Assigned(ABuffer) and (ALen > 0) then
+  begin
+    fRawBuffer := ABuffer;
+    fRawBufferLength := ALen;
+  end
+  else
+    ClearImageBuffer;
+  PythonManager.SetBuffer(fRawBuffer, fRawBufferLength);
 end;
 
 procedure TOnnxrtWrapper.RegisterStatusEvent(
