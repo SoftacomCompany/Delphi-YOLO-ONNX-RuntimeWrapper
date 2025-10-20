@@ -1,0 +1,733 @@
+object FormVideoDetectMain: TFormVideoDetectMain
+  Left = 0
+  Top = 0
+  BorderStyle = None
+  Caption = 'Form1'
+  ClientHeight = 472
+  ClientWidth = 668
+  Fill.Color = claBlack
+  Fill.Kind = Solid
+  Position = OwnerFormCenter
+  WindowState = wsMaximized
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  DesignerMasterStyle = 0
+  object lyDisplay: TLayout
+    Align = Client
+    Size.Width = 668.000000000000000000
+    Size.Height = 407.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object imgDisplay: TImage
+      MultiResBitmap.Height = 500
+      MultiResBitmap.Width = 750
+      MultiResBitmap = <
+        item
+        end>
+      Align = Client
+      ClipChildren = True
+      Margins.Left = 5.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Margins.Right = 5.000000000000000000
+      Margins.Bottom = 5.000000000000000000
+      Size.Width = 377.000000000000000000
+      Size.Height = 397.000000000000000000
+      Size.PlatformDefault = False
+      OnClick = imgDisplayClick
+      OnMouseMove = imgDisplayMouseMove
+      object lyControl: TLayout
+        Anchors = [akLeft, akRight, akBottom]
+        Position.Y = 354.000000000000000000
+        Size.Width = 377.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        OnMouseMove = lyControlMouseMove
+        object faShowHideControl: TFloatAnimation
+          AnimationType = Out
+          Duration = 0.200000002980232200
+          OnFinish = faShowHideControlFinish
+          PropertyName = 'Position.Y'
+          StartValue = 0.000000000000000000
+          StopValue = 0.000000000000000000
+        end
+        object rrectControl: TRoundRect
+          Align = Center
+          Fill.Kind = None
+          Opacity = 0.800000011920929000
+          Size.Width = 260.000000000000000000
+          Size.Height = 24.000000000000000000
+          Size.PlatformDefault = False
+          Stroke.Kind = None
+          object lblCamera: TLabel
+            Align = Left
+            AutoSize = True
+            Enabled = False
+            StyledSettings = [Family, Size]
+            Margins.Left = 8.000000000000000000
+            Position.X = 8.000000000000000000
+            Size.Width = 49.599998474121090000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+            TextSettings.FontColor = claWhite
+            TextSettings.WordWrap = False
+            Text = 'Camera  '
+            TabOrder = 3
+            OnMouseMove = lyControlMouseMove
+          end
+          object swRunCamera: TSwitch
+            Align = Left
+            Enabled = False
+            IsChecked = False
+            Position.X = 57.599998474121090000
+            Size.Width = 50.000000000000000000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
+            OnMouseMove = lyControlMouseMove
+            OnSwitch = swRunCameraSwitch
+          end
+          object lblRecognition: TLabel
+            Align = Right
+            AutoSize = True
+            Enabled = False
+            StyledSettings = [Family, Size]
+            Position.X = 126.800010681152300000
+            Size.Width = 75.199996948242190000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+            TextSettings.FontColor = claWhite
+            TextSettings.WordWrap = False
+            Text = 'Recognition  '
+            TabOrder = 2
+            OnMouseMove = lyControlMouseMove
+          end
+          object swRecognition: TSwitch
+            Align = Right
+            Enabled = False
+            IsChecked = False
+            Margins.Right = 8.000000000000000000
+            Position.X = 202.000000000000000000
+            Size.Width = 50.000000000000000000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 0
+            OnMouseMove = lyControlMouseMove
+            OnSwitch = swRecognitionSwitch
+          end
+        end
+      end
+      object dlgLoadImage: TOpenDialog
+        Filter = 
+          'All (*.svg;*.gif;*.png_old;*.gif;*.jpg;*.jpeg;*.png;*.bmp;*.ico;' +
+          '*.emf;*.wmf;*.tif;*.tiff)|*.svg;*.gif;*.png_old;*.gif;*.jpg;*.jp' +
+          'eg;*.png;*.bmp;*.ico;*.emf;*.wmf;*.tif;*.tiff|Scalable Vector Gr' +
+          'aphics (*.svg)|*.svg|Graphics Interchange Format (*.gif)|*.gif|P' +
+          'ortable Network Graphics (*.png_old)|*.png_old|GIF Image (*.gif)' +
+          '|*.gif|JPEG Image File (*.jpg)|*.jpg|JPEG Image File (*.jpeg)|*.' +
+          'jpeg|Portable Network Graphics (*.png)|*.png|Bitmaps (*.bmp)|*.b' +
+          'mp|Icons (*.ico)|*.ico|Enhanced Metafiles (*.emf)|*.emf|Metafile' +
+          's (*.wmf)|*.wmf|TIFF Images (*.tif)|*.tif|TIFF Images (*.tiff)|*' +
+          '.tiff'
+        Options = [ofEnableSizing]
+        Left = 112
+        Top = 120
+      end
+    end
+    object rectSettings: TRectangle
+      Align = MostRight
+      Fill.Color = claBlack
+      Opacity = 0.500000000000000000
+      Margins.Top = 5.000000000000000000
+      Margins.Bottom = 5.000000000000000000
+      Position.X = 392.000000000000000000
+      Position.Y = 5.000000000000000000
+      Size.Width = 276.000000000000000000
+      Size.Height = 397.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Color = claWhite
+      object lblSettings: TLabel
+        Align = MostTop
+        StyledSettings = [Family, Size, Style]
+        Margins.Left = 6.000000000000000000
+        Margins.Top = 5.000000000000000000
+        Margins.Right = 5.000000000000000000
+        Margins.Bottom = 5.000000000000000000
+        Position.X = 6.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 265.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.FontColor = claWhite
+        Text = 'Settings'
+        TabOrder = 0
+      end
+      object grdSettings: TStringGrid
+        Align = Top
+        CanFocus = True
+        ClipChildren = True
+        Opacity = 0.000000000000000000
+        Margins.Left = 5.000000000000000000
+        Margins.Right = 5.000000000000000000
+        Margins.Bottom = 5.000000000000000000
+        Position.X = 5.000000000000000000
+        Position.Y = 27.000000000000000000
+        Size.Width = 266.000000000000000000
+        Size.Height = 75.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.FontColor = claWhite
+        StyledSettings = [Family, Size, Style]
+        TabOrder = 1
+        RowCount = 1
+        Options = [RowSelect, Tabs]
+        DefaultDrawing = False
+        OnDrawColumnBackground = grdSettingsDrawColumnBackground
+        OnDrawColumnCell = grdSettingsDrawColumnCell
+        OnResized = grdSettingsResized
+        OnCellClick = grdSettingsCellClick
+        Viewport.Width = 262.000000000000000000
+        Viewport.Height = 71.000000000000000000
+        object clSettings: TStringColumn
+          HeaderSettings.TextSettings.WordWrap = False
+        end
+        object clSettingValues: TStringColumn
+          HeaderSettings.TextSettings.WordWrap = False
+          Size.Width = 160.000000000000000000
+        end
+      end
+      object ppFilter: TPopup
+        Position.X = -206.000000000000000000
+        Position.Y = 119.000000000000000000
+        Size.Width = 300.000000000000000000
+        Size.Height = 217.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 11
+        object lyFilterButtons: TLayout
+          Align = Bottom
+          Position.Y = 183.000000000000000000
+          Size.Width = 300.000000000000000000
+          Size.Height = 34.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          object btnFilterOk: TButton
+            Align = Right
+            ModalResult = 1
+            Margins.Left = 5.000000000000000000
+            Margins.Top = 5.000000000000000000
+            Margins.Right = 5.000000000000000000
+            Margins.Bottom = 5.000000000000000000
+            Position.X = 110.000000000000000000
+            Position.Y = 5.000000000000000000
+            Size.Width = 80.000000000000000000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 0
+            Text = 'Ok'
+            TextSettings.Trimming = None
+          end
+          object btnFilterCancel: TButton
+            Align = Right
+            ModalResult = 2
+            Margins.Left = 5.000000000000000000
+            Margins.Top = 5.000000000000000000
+            Margins.Right = 20.000000000000000000
+            Margins.Bottom = 5.000000000000000000
+            Position.X = 200.000000000000000000
+            Position.Y = 5.000000000000000000
+            Size.Width = 80.000000000000000000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
+            Text = 'Cancel'
+            TextSettings.Trimming = None
+          end
+        end
+        object lbFilter: TListBox
+          Align = Client
+          Size.Width = 300.000000000000000000
+          Size.Height = 183.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          AlternatingRowBackground = True
+          Columns = 3
+          DisableFocusEffect = True
+          DefaultItemStyles.ItemStyle = ''
+          DefaultItemStyles.GroupHeaderStyle = ''
+          DefaultItemStyles.GroupFooterStyle = ''
+          ShowCheckboxes = True
+          Viewport.Width = 296.000000000000000000
+          Viewport.Height = 179.000000000000000000
+        end
+      end
+      object cbSelect: TComboBox
+        ItemIndex = 0
+        Position.X = 8.000000000000000000
+        Position.Y = 297.000000000000000000
+        Size.Width = 145.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 12
+        Visible = False
+        OnClosePopup = cbSelectClosePopup
+        OnPaint = cbSelectPaint
+      end
+      object gbProviders: TGroupBox
+        Tag = 3
+        Align = Top
+        ClipChildren = True
+        StyledSettings = [Family, Size, Other]
+        Margins.Left = 5.000000000000000000
+        Margins.Right = 7.000000000000000000
+        Margins.Bottom = 5.000000000000000000
+        Position.X = 5.000000000000000000
+        Position.Y = 107.000000000000000000
+        Size.Width = 264.000000000000000000
+        Size.Height = 77.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Providers'
+        TextSettings.FontColor = claLimegreen
+        TabOrder = 14
+        OnClick = memProvidersClick
+        object memProviders: TMemo
+          Tag = 3
+          Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+          DataDetectorTypes = []
+          ReadOnly = True
+          StyledSettings = [Family, Size, Style]
+          TextSettings.FontColor = claWhite
+          TextSettings.WordWrap = True
+          Align = Client
+          Margins.Left = 7.000000000000000000
+          Margins.Top = 18.000000000000000000
+          Margins.Right = 7.000000000000000000
+          Margins.Bottom = 7.000000000000000000
+          Size.Width = 250.000000000000000000
+          Size.Height = 52.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 38
+          OnPaint = memProvidersPaint
+          OnClick = memProvidersClick
+          Viewport.Width = 246.000000000000000000
+          Viewport.Height = 48.000000000000000000
+        end
+      end
+      object gbClassFilter: TGroupBox
+        Align = Top
+        StyledSettings = [Family, Size, Other]
+        Margins.Left = 5.000000000000000000
+        Margins.Right = 7.000000000000000000
+        Margins.Bottom = 5.000000000000000000
+        Position.X = 5.000000000000000000
+        Position.Y = 194.000000000000000000
+        Size.Width = 264.000000000000000000
+        Size.Height = 133.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Class filter'
+        TextSettings.FontColor = claLimegreen
+        TabOrder = 13
+        object memClassFilter: TMemo
+          Tag = 4
+          Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+          DataDetectorTypes = []
+          ReadOnly = True
+          StyledSettings = [Family, Size, Style]
+          TextSettings.FontColor = claWhite
+          TextSettings.WordWrap = True
+          Align = Client
+          Margins.Left = 7.000000000000000000
+          Margins.Top = 18.000000000000000000
+          Margins.Right = 7.000000000000000000
+          Margins.Bottom = 7.000000000000000000
+          Size.Width = 250.000000000000000000
+          Size.Height = 108.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 38
+          OnPaint = memProvidersPaint
+          OnClick = memProvidersClick
+          Viewport.Width = 246.000000000000000000
+          Viewport.Height = 104.000000000000000000
+        end
+      end
+      object splProviders: TSplitter
+        Align = Top
+        Cursor = crVSplit
+        MinSize = 20.000000000000000000
+        Position.Y = 189.000000000000000000
+        Size.Width = 276.000000000000000000
+        Size.Height = 5.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object splClasses: TSplitter
+        Align = Top
+        Cursor = crVSplit
+        MinSize = 20.000000000000000000
+        Position.Y = 332.000000000000000000
+        Size.Width = 276.000000000000000000
+        Size.Height = 5.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object lyRecognitionFixed: TLayout
+        Align = MostBottom
+        ClipChildren = True
+        Margins.Left = 6.000000000000000000
+        Margins.Right = 6.000000000000000000
+        Margins.Bottom = 6.000000000000000000
+        Position.X = 6.000000000000000000
+        Position.Y = 367.000000000000000000
+        Size.Width = 264.000000000000000000
+        Size.Height = 24.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 16
+        object lblRecognitionFixed: TLabel
+          Align = Right
+          AutoSize = True
+          Enabled = False
+          StyledSettings = [Family, Size]
+          Position.X = 126.800003051757800000
+          Size.Width = 75.199996948242190000
+          Size.Height = 24.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.StyleExt = {00070000000000000004000000}
+          TextSettings.FontColor = claWhite
+          TextSettings.WordWrap = False
+          Text = 'Recognition  '
+          TabOrder = 2
+        end
+        object swRecognitionFixed: TSwitch
+          Align = MostRight
+          Enabled = False
+          IsChecked = False
+          Margins.Right = 12.000000000000000000
+          Position.X = 202.000000000000000000
+          Size.Width = 50.000000000000000000
+          Size.Height = 24.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          OnSwitch = swRecognitionSwitch
+        end
+      end
+      object lyCameraFixed: TLayout
+        Align = Bottom
+        ClipChildren = True
+        Margins.Left = 6.000000000000000000
+        Margins.Right = 6.000000000000000000
+        Margins.Bottom = 6.000000000000000000
+        Position.X = 6.000000000000000000
+        Position.Y = 337.000000000000000000
+        Size.Width = 264.000000000000000000
+        Size.Height = 24.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 15
+        object lblCameraFixed: TLabel
+          Align = Right
+          AutoSize = True
+          Enabled = False
+          StyledSettings = [Family, Size]
+          Margins.Left = 8.000000000000000000
+          Position.X = 152.399993896484400000
+          Size.Width = 49.600006103515630000
+          Size.Height = 24.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.StyleExt = {00070000000000000004000000}
+          TextSettings.FontColor = claWhite
+          TextSettings.WordWrap = False
+          Text = 'Camera  '
+          TabOrder = 3
+        end
+        object swRunCameraFixed: TSwitch
+          Align = MostRight
+          Enabled = False
+          IsChecked = False
+          Margins.Right = 12.000000000000000000
+          Position.X = 202.000000000000000000
+          Size.Width = 50.000000000000000000
+          Size.Height = 24.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          OnSwitch = swRunCameraSwitch
+        end
+      end
+    end
+    object splSettings: TSplitter
+      Align = Right
+      Cursor = crHSplit
+      MinSize = 150.000000000000000000
+      Position.X = 387.000000000000000000
+      ShowGrip = False
+      Size.Width = 5.000000000000000000
+      Size.Height = 407.000000000000000000
+      Size.PlatformDefault = False
+    end
+  end
+  object rectHeader: TRectangle
+    Align = Top
+    Fill.Color = claBlack
+    Opacity = 0.500000000000000000
+    Size.Width = 668.000000000000000000
+    Size.Height = 40.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Color = claWhite
+    OnMouseDown = rectHeaderMouseDown
+    object btnMenu: TSpeedButton
+      Align = Right
+      ImageIndex = 0
+      PopupMenu = ppmSys
+      Position.X = 628.000000000000000000
+      Size.Width = 40.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Trimming = None
+      OnClick = btnMenuClick
+      object imMenu: TImage
+        MultiResBitmap.Height = 96
+        MultiResBitmap.Width = 96
+        MultiResBitmap = <
+          item
+            Width = 96
+            Height = 96
+            PNG = {
+              89504E470D0A1A0A0000000D4948445200000060000000600806000000E29877
+              380000000473424954080808087C086488000008B649444154789CED9D5B6C1C
+              571DC6BFFF59AF17BCAC0D7948B90842BA90163952A870A5C48E3D3B9B8B8251
+              51225052A98D6841542A09082842AA4B2029A80F3C409A94A02A4220A517535A
+              A106648894CCECD80A0D6215A034228D50288AB82445A4B5D776ACF5CEC743D6
+              1B5FD67B9D8BED99DFD3ECCC99F3FF76BE997366CE9C390708F115F15B4035B2
+              D96C746C6C2C09E04E11B91D4007C9B88824487688880290139171DBB6C79552
+              D701FC5B442E160A854BBAAEBFE5EF3FA8CC9233C0B2AC8F0148934C91DC2022
+              6B01B43491E5359217446484A4393939F94A7F7FFF9443729BC67703B2D96C34
+              97CBED20B907405A44DEE7663C92934AA9DF913CA9947ABEAFAFEF4D37E355C3
+              37030CC3E81491BD22F20080DB7C925100608AC889783CFE625757D784D7023C
+              37C034CDAD001E17914D5EC7AE04C937011C0370D8CB7AC3130348AAE1E1E1CF
+              921C00B0C18B988D42F2BA881C6D6D6D7DB2BBBBFB7F6EC773DD00CBB2EE2279
+              0CC046B76339CC5B2272F0EAD5AB4FEDDEBDBBE05610D70C304DF3DD227208C0
+              3E0011B7E278C07992FB745D3FE746E6AE186018C6A794523F817F95ABD31444
+              E487F1787CA0ABAB2BEF64C68E1A609A660B806F89C80100CAC9BC9708D94824
+              B2A7B7B7F7B253193A668065591F243908A0DBA93C9722C54AFA0BA954EA974E
+              E4E7C8596A9AE67A92E7B0C20F3E0088C87B48BE649AE64147F26B3603C33034
+              A5D4CB003A1CD0B3DC38A269DAD744C46E3483A60CC86432BB003C07E01DCDE4
+              B39C21F96C229178B0D1CAB9E146AE4C26730F80179AC963252022F7E572B908
+              C9FB1AB9121AAA034CD3DC086010013FF8B3B8D7B2ACA71AD9B16E034CD35C0F
+              6008405B230157300F67329903F5EE54571D70FAF4E9DB5A5A5ACE03787FBD81
+              828288DCAF69DAB3B5A6AFF90A20A92291C8098407BF22249F2EBE54AA899A0D
+              C864320322B2AD315981224EF2856C365B53115D93019665F589C8779AD31528
+              D6E772B9276B4958B50E181A1A8AB5B5B5BD0A605DD3B20206C94FEABAFEDB4A
+              69AA5E016D6D6D03080F7EA31C191A1A8A554A50D100D3343F02E09B8E4A0A10
+              22F2D1783CFE8D4A692A1A20224711E0660627B06DFBB13367CEAC596CFBA206
+              6432994D0076B8A22A4088C83B95528F2EB67D510348D6FD5417B2289F1F1919
+              F950B90D650D300C6303C2B3DF3144243A3D3DFDF572DBCA1AA0947A4C447CEF
+              35B79210912F9E3D7B76F5FCF50B0C2826DAE589AA60D1363D3DBD77FECA0506
+              E4F3F9FB113633BB02C907E6AF2B57042D7029C431D617EBD712730C300CA313
+              C0C73D9514304464CE093EA7A8514AED765BC0D8D818060707DD0ED3106BD6AC
+              C1F6EDDB5D8D21229F01507A3A9E5FD6A75D8D0E8024464747DD0ED31013139E
+              F44EFFB065596B354DFB3B30AB082AB65FDFED8582905B277AC980F1F1F1CD00
+              2AB6DC8538836DDBFACC72A90822A979113C1A8DA2B3B3D38B5075B37AF582E7
+              2457109154697966C134CD9322728F270A4210894456F5F6F65E2F1541227287
+              9F8282463E9F5F0714EB806C361B25B9D65F49C1221289DC01140D181D1DBD5D
+              44A2FE4A0A16246F19108944167D6313E20E24D70045036CDB6EF7574E206907
+              8AB7A12292F02AEAD4D4142E5CB8E055B8BAE8E8E8403299F424D6CC319F790E
+              7897275171D300D334BD0A5717C964D27303666E433DBB02426E42728E0121DE
+              43E09601633E0A092A6340B10E2039E6D53BF8442281FDFBF77B12AB5E94F2AE
+              4020E98F012282582C6C74159131E0D68358580479CCCC15A000A05028FCC35F
+              3981E40DA068407B7BFB65928E0E4211521911791D281AD0D5D5951711C706A0
+              08A98E52EA9601455EF7494B2029140A9780B9BD225E03F069B7038F8E8EE2F8
+              F1E36E8769886432899D3B77BA1E87E4959971E94A57806DDBC3AE470E010088
+              486666B964407B7BFB08802533A0E90AA7D41A5932A03866E61F7C9113304896
+              0C98DF33CE00B0D9CDE0B1580CDDDD4B735CA755AB567911E6B2AEEB6FCCFC98
+              6300C95F88C8B7DD8C1E8BC5B069D3921AB3D56B5E9AFD634EEB93AEEBAF01F8
+              B3A772028652EA9939BFE727109113DEC9091C7FEAEBEB7B75F68A725FC83C03
+              60DA3349C162C1C9BDC080AD5BB75E0570D21339C1625C2955DD00001091EF91
+              A4FB9A02C5D3E5E62A286B80A6697F149153EE6B0A0C538542E107E536547A07
+              F7B84B62028788FC74CB962DFF2CB76D510352A9D42BE155E008E3009E586C63
+              C5B7D0B66DEF0770C36945414244BEAB69DA95C5B6573440D7F5BF01F8BEE3AA
+              82C3A5F1F1F1C3951254ED87313131F104804B8E490A1022F270B529B3AA1AD0
+              DFDF3F65DBF643B839E35048EDFC58D334A35AA29A7A22A5D3690BC0A1A62505
+              04927F696D6D7DA496B435F7C622A92CCBFA0D00773F255FFEE448DEADEBFAC5
+              5A12D7DC174F44EC6834BA1740D9FBD910A0D87AF050AD071FA8B377744F4FCF
+              35923B00B83EBFD6326520954A3D5FCF0E0D7508354D73A3889C06106F64FF15
+              CAB1542AB5AFDE9D1AEA0EACEBFA3992F7226CB6060090FCB9A6695F6E64DF86
+              FB63EBBAFE6B11D983F049F9994422B1B7D17964C2497C9AE3A8A6695F6D6612
+              9FA6BF4848A7D316C9CD08D0DD116F7228954A7DA599830F383F91DB7370B95B
+              8BDF90BC4EF2C1743AFDB213F939F64D8EA6695748EA240F0168EAAC58C2645B
+              5A5ABA9C3AF8804B93795A96B5DDB6ED9FB93D3DB98714481E4E24128F2EE9C9
+              3C6773EAD4A9786B6BEB01117904CB7B1CD2F3B66D7F299D4EFFDE8DCC5DFF32
+              CF308C0D4AA963587EF34C2EEF099D67435286878777011820F9092F62360AC9
+              EB008EC462B1232B624AF3F998A6B959297590E416AF6357E1BF247F04E0F0CC
+              C7135EE0DB08E98661748AC85E11F91C80F7FA24A300C0149113F178FCC56217
+              7D4FF17D887AD3345B9452DB6DDBDE2D225B017CC0CD78242745E42C805F45A3
+              D1C19E9E9E6B6EC6AB86EF06CC676464649D6DDB3AC91480BB48363B9CDA7F48
+              FE5544466CDB366EDCB871AEDA7B5A2F597206CC279BCD46272727D7DAB67D27
+              C924C90EA5549C643BC90E1151B839F0C538809C88BC4DF25F002EE6F3F94BDB
+              B66D7BDBDF7F10B2A4F93F879CF45B91CA6CC30000000049454E44AE426082}
+            FileName = 
+              'C:\Users\user\Pictures\SelfService Images\Buttons\icons8-menu-96' +
+              '_lines.png'
+          end
+          item
+            Scale = 2.000000000000000000
+          end>
+        Align = Client
+        HitTest = False
+        Margins.Left = 5.000000000000000000
+        Margins.Top = 5.000000000000000000
+        Margins.Right = 5.000000000000000000
+        Margins.Bottom = 5.000000000000000000
+        Size.Width = 30.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+      end
+    end
+    object lblHead: TLabel
+      Align = Left
+      AutoSize = True
+      StyledSettings = [Family, Size, Style]
+      Margins.Left = 12.000000000000000000
+      Position.X = 12.000000000000000000
+      Size.Width = 315.200012207031300000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.FontColor = claWhite
+      TextSettings.WordWrap = False
+      Text = 'Delphi ONNXRT Vision '#8211' Image && Camera Object Detection'
+      TabOrder = 0
+    end
+  end
+  object Camera: TCameraComponent
+    OnSampleBufferReady = CameraSampleBufferReady
+    Left = 16
+    Top = 56
+  end
+  object ppmSys: TPopupMenu
+    OnPopup = ppmSysPopup
+    Left = 112
+    Top = 56
+    object miSettings: TMenuItem
+      Action = acSettings
+      ImageIndex = -1
+    end
+    object miSeparator1: TMenuItem
+      Enabled = False
+      StyleLookup = 'menuseparatorstyle'
+      Text = '-'
+    end
+    object miMinimize: TMenuItem
+      Action = acMinimize
+      ImageIndex = -1
+    end
+    object miMaximize: TMenuItem
+      Action = acMaximize
+      ImageIndex = -1
+    end
+    object miRestore: TMenuItem
+      Action = acRestore
+      Locked = True
+      ImageIndex = -1
+    end
+    object miSeparator2: TMenuItem
+      Enabled = False
+      StyleLookup = 'menuseparatorstyle'
+      Text = '-'
+    end
+    object miExit: TMenuItem
+      Action = acClose
+      Locked = True
+      ImageIndex = -1
+    end
+  end
+  object tmrHideControl: TTimer
+    Enabled = False
+    Interval = 5000
+    OnTimer = tmrHideControlTimer
+    Left = 192
+    Top = 56
+  end
+  object dlgLoadModel: TOpenDialog
+    Filter = 'ONNXRT model (*.onnx)|*.onnx'
+    Left = 13
+    Top = 120
+  end
+  object tmrStartRecognition: TTimer
+    Enabled = False
+    OnTimer = tmrStartRecognitionTimer
+    Left = 197
+    Top = 117
+  end
+  object sbStatus: TStatusBar
+    Align = MostBottom
+    Opacity = 0.500000000000000000
+    Position.Y = 447.000000000000000000
+    ShowSizeGrip = True
+    Size.Width = 668.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object lblStatus: TLabel
+      Align = Left
+      Margins.Left = 10.000000000000000000
+      Position.X = 10.000000000000000000
+      Size.Width = 103.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Detection status: '
+      TabOrder = 1
+    end
+    object lblStatusName: TLabel
+      Align = Left
+      Position.X = 113.000000000000000000
+      Size.Width = 88.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'None'
+      TabOrder = 3
+    end
+    object lblProcessTime: TLabel
+      Align = Left
+      Margins.Left = 10.000000000000000000
+      Position.X = 211.000000000000000000
+      Size.Width = 100.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Process time: '
+      TabOrder = 0
+    end
+    object lblTimeValue: TLabel
+      Align = Left
+      Position.X = 311.000000000000000000
+      Size.Width = 127.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      Text = '0 ms'
+      TabOrder = 2
+    end
+  end
+  object alSys: TActionList
+    Left = 64
+    Top = 56
+    object acSettings: TAction
+      AutoCheck = True
+      Text = 'acSettings'
+      Checked = True
+      OnExecute = acSettingsExecute
+    end
+    object acMinimize: TAction
+      Text = 'Minimize'
+      OnExecute = acMinimizeExecute
+    end
+    object acMaximize: TAction
+      Text = 'Maximize'
+      OnExecute = acMaximizeExecute
+    end
+    object acRestore: TAction
+      Text = 'Restore'
+      OnExecute = acRestoreExecute
+    end
+    object acClose: TAction
+      Text = 'Exit'
+      OnExecute = acCloseExecute
+    end
+  end
+end
